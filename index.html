@@ -8,296 +8,659 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
-      rel="stylesheet"
-    />
     <style>
+      /* Pokemon GB authentic font */
+      @font-face {
+        font-family: 'PokemonGB';
+        src: url('https://db.onlinewebfonts.com/t/831e1f4da157d96bc996f8c9f5f1e578.woff2') format('woff2'),
+             url('https://db.onlinewebfonts.com/t/831e1f4da157d96bc996f8c9f5f1e578.woff') format('woff'),
+             url('https://db.onlinewebfonts.com/t/831e1f4da157d96bc996f8c9f5f1e578.ttf') format('truetype');
+        font-display: swap;
+      }
+
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
 
+      html, body {
+        height: 100%;
+        overflow: hidden;
+      }
+
+      /* Pokemon Red palette (actual Game Boy Color Red version colors) */
+      :root {
+        --gb-white: #f8f8f8;
+        --gb-black: #181818;
+        --gb-gray-dark: #505050;
+        --gb-gray-light: #a8a8a8;
+        --red-primary: #d82828;
+        --red-dark: #a01818;
+        --red-light: #f85040;
+        --shell-bg: #1a1a1a;
+      }
+
       body {
-        background-color: #f8f8f8;
-        font-family: 'Press Start 2P', monospace;
-        font-size: 11px;
-        line-height: 2;
-        color: #1a1a2e;
+        background: 
+          radial-gradient(ellipse at center, #2a2a2a 0%, #0a0a0a 100%);
+        font-family: 'PokemonGB', 'Courier New', monospace;
+        color: var(--gb-black);
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 20px;
         image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
+        -webkit-font-smoothing: none;
+        -moz-osx-font-smoothing: grayscale;
+        font-smooth: never;
+        letter-spacing: 0.5px;
       }
 
-      .screen {
-        max-width: 520px;
+      /* ===== GAME BOY SHELL ===== */
+      .gameboy {
         width: 100%;
-        padding: 16px;
+        max-width: 480px;
+        background: linear-gradient(180deg, #c81010 0%, #a01818 100%);
+        border-radius: 12px 12px 60px 12px;
+        padding: 28px 24px 60px;
+        box-shadow: 
+          inset 0 2px 0 rgba(255,255,255,0.15),
+          inset 0 -2px 0 rgba(0,0,0,0.3),
+          0 20px 50px rgba(0,0,0,0.6),
+          0 0 0 1px rgba(0,0,0,0.5);
+        position: relative;
       }
 
-      /* Pokemon Red dialog box */
-      .dialog-box {
-        border: 4px solid #1a1a2e;
-        border-radius: 12px;
-        background: #f8f8f8;
-        padding: 20px 24px;
-        margin-bottom: 16px;
+      .gameboy::before {
+        content: "POKéMON";
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 9px;
+        color: rgba(255,255,255,0.5);
+        letter-spacing: 3px;
+      }
+
+      /* Power LED */
+      .power-led {
+        position: absolute;
+        top: 36px;
+        left: 24px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .led-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ff3030;
+        box-shadow: 
+          0 0 6px #ff3030,
+          inset 0 0 2px rgba(255,255,255,0.5);
+        animation: led-pulse 3s ease-in-out infinite;
+      }
+
+      @keyframes led-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+      }
+
+      .led-label {
+        font-size: 6px;
+        color: rgba(255,255,255,0.6);
+        letter-spacing: 2px;
+      }
+
+      /* ===== SCREEN BEZEL ===== */
+      .screen-bezel {
+        background: #181818;
+        border-radius: 8px 8px 32px 8px;
+        padding: 16px 16px 40px;
+        box-shadow: 
+          inset 0 3px 6px rgba(0,0,0,0.7),
+          inset 0 -2px 4px rgba(255,255,255,0.05);
+        position: relative;
+        margin-top: 16px;
+      }
+
+      .screen-bezel::after {
+        content: "DOT MATRIX WITH STEREO SOUND";
+        position: absolute;
+        bottom: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 6px;
+        color: rgba(255,255,255,0.35);
+        letter-spacing: 2px;
+        white-space: nowrap;
+      }
+
+      /* ===== GAME BOY SCREEN ===== */
+      .screen {
+        background: var(--gb-white);
+        aspect-ratio: 10 / 9;
+        width: 100%;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        position: relative;
+        overflow: hidden;
+        /* Subtle scanline/LCD effect */
+        background-image: 
+          repeating-linear-gradient(
+            0deg,
+            rgba(0,0,0,0.02) 0px,
+            rgba(0,0,0,0.02) 1px,
+            transparent 1px,
+            transparent 3px
+          );
+      }
+
+      /* Pokemon Red signature dialog box: double-line border with rounded corners */
+      .box {
+        background: var(--gb-white);
+        border: 3px solid var(--gb-black);
+        border-radius: 8px;
+        padding: 8px 10px;
         position: relative;
         box-shadow: 
-          inset 2px 2px 0 #fff,
-          inset -2px -2px 0 #d0d0d0,
-          4px 4px 0 rgba(0,0,0,0.1);
-      }
-
-      /* Title header box */
-      .title-box {
-        text-align: center;
-        padding: 24px;
-      }
-
-      .title-box h2 {
-        font-size: 28px;
-        letter-spacing: 4px;
-        text-transform: uppercase;
-        margin-bottom: 8px;
-      }
-
-      .title-box .subtitle {
-        font-size: 8px;
-        color: #666;
-        letter-spacing: 2px;
-      }
-
-      .pfp {
-        width: 80px;
-        height: 80px;
-        image-rendering: pixelated;
-        border: 3px solid #1a1a2e;
-        margin: 0 auto 16px;
-        display: block;
-      }
-
-      /* Menu items */
-      .menu-item {
-        display: flex;
-        align-items: baseline;
-        padding: 4px 0;
-        text-decoration: none;
-        color: #1a1a2e;
-        transition: none;
-        cursor: pointer;
-      }
-
-      .menu-item:hover .arrow {
-        visibility: visible;
-      }
-
-      .menu-item:hover {
-        background: #1a1a2e;
-        color: #f8f8f8;
-        margin: 0 -24px;
-        padding: 4px 24px;
-      }
-
-      .arrow {
-        visibility: hidden;
-        margin-right: 8px;
+          inset 0 0 0 2px var(--gb-white),
+          inset 0 0 0 3px var(--gb-black);
         font-size: 10px;
+        line-height: 1.5;
       }
 
-      .menu-item:first-child .arrow {
-        visibility: visible;
-      }
-
-      /* Separator */
-      .sep {
-        border: none;
-        border-top: 2px dashed #ccc;
-        margin: 12px 0;
-      }
-
-      /* Section labels */
-      .section-label {
-        font-size: 8px;
-        color: #888;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        margin-bottom: 8px;
-      }
-
-      /* Text content */
-      .text-content p {
-        margin-bottom: 8px;
-      }
-
-      .text-content a {
-        color: #1a1a2e;
-        text-decoration: none;
-        border-bottom: 2px solid #1a1a2e;
-      }
-
-      .text-content a:hover {
-        background: #1a1a2e;
-        color: #f8f8f8;
-      }
-
-      /* Status bar */
-      .status-bar {
+      /* Top section: character intro area */
+      .top-section {
         display: flex;
-        justify-content: space-between;
+        gap: 8px;
+        align-items: stretch;
+      }
+
+      .trainer-card {
+        flex: 1;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .trainer-sprite {
+        width: 56px;
+        height: 56px;
+        border: 3px solid var(--gb-black);
+        border-radius: 4px;
+        background: var(--gb-white);
+        image-rendering: pixelated;
+        box-shadow: 
+          inset 0 0 0 2px var(--gb-white),
+          inset 0 0 0 3px var(--gb-black);
+        flex-shrink: 0;
+      }
+
+      .trainer-info {
+        flex: 1;
         font-size: 8px;
-        color: #999;
-        padding: 8px 0 0;
+        line-height: 1.8;
+      }
+
+      .trainer-info .label {
+        color: var(--gb-gray-dark);
+        margin-right: 4px;
+      }
+
+      .trainer-name {
+        font-size: 11px;
+        color: var(--gb-black);
+      }
+
+      /* Right side START MENU (iconic Pokemon Red menu) */
+      .start-menu {
+        width: 110px;
+        padding: 8px 0 8px 8px;
+        flex-shrink: 0;
+      }
+
+      .menu-list {
+        list-style: none;
+      }
+
+      .menu-list li {
+        font-size: 9px;
+        padding: 2px 0 2px 10px;
+        position: relative;
+        cursor: pointer;
+        color: var(--gb-black);
+        text-decoration: none;
+        display: block;
         letter-spacing: 1px;
       }
 
-      /* Blinking cursor */
-      .cursor-blink {
-        display: inline-block;
-        width: 8px;
-        height: 12px;
-        background: #1a1a2e;
-        animation: blink 1s step-end infinite;
-        vertical-align: middle;
-        margin-left: 4px;
-      }
-
-      @keyframes blink {
-        50% { opacity: 0; }
-      }
-
-      /* Currently working on list */
-      .work-list {
-        list-style: none;
-        padding: 0;
-      }
-
-      .work-list li {
-        padding: 2px 0;
-      }
-
-      .work-list li::before {
-        content: "▸ ";
-      }
-
-      /* Contact list */
-      .contact-list {
-        list-style: none;
-        padding: 0;
-      }
-
-      .contact-list li {
-        padding: 3px 0;
-        font-size: 10px;
-      }
-
-      .contact-list a {
-        color: #1a1a2e;
+      .menu-list li a {
+        color: inherit;
         text-decoration: none;
-        border-bottom: 2px solid #1a1a2e;
+        display: block;
       }
 
-      .contact-list a:hover {
-        background: #1a1a2e;
-        color: #f8f8f8;
+      .menu-list li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-top: 4px solid transparent;
+        border-bottom: 4px solid transparent;
+        border-left: 5px solid var(--gb-black);
+        opacity: 0;
+        transition: none;
       }
 
-      /* Pokeball decoration */
-      .pokeball {
-        text-align: center;
-        font-size: 16px;
-        margin: 4px 0;
-        letter-spacing: 8px;
+      .menu-list li:hover::before,
+      .menu-list li.selected::before {
+        opacity: 1;
       }
 
-      /* Press start prompt */
-      .press-start {
-        text-align: center;
+      .menu-list li:hover,
+      .menu-list li.selected {
+        animation: selector-blink 0.8s step-end infinite;
+      }
+
+      @keyframes selector-blink {
+        50% {
+          background: rgba(0,0,0,0.08);
+        }
+      }
+
+      /* Middle: info box (like battle message box) */
+      .info-box {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        font-size: 9px;
+        line-height: 1.7;
+      }
+
+      .info-box::-webkit-scrollbar {
+        width: 4px;
+      }
+      .info-box::-webkit-scrollbar-thumb {
+        background: var(--gb-black);
+      }
+
+      .info-box p {
+        margin-bottom: 4px;
+      }
+
+      .info-box a {
+        color: var(--gb-black);
+        text-decoration: none;
+        border-bottom: 2px solid var(--gb-black);
+      }
+
+      .info-box a:hover {
+        background: var(--gb-black);
+        color: var(--gb-white);
+      }
+
+      .quest-list {
+        list-style: none;
+        padding-left: 8px;
+        margin-top: 4px;
+      }
+
+      .quest-list li {
+        padding: 2px 0;
         font-size: 8px;
-        animation: blink 1.5s step-end infinite;
-        padding: 8px 0;
-        letter-spacing: 2px;
+        position: relative;
+        padding-left: 10px;
       }
 
-      @media (max-width: 480px) {
+      .quest-list li::before {
+        content: "▸";
+        position: absolute;
+        left: 0;
+        color: var(--red-primary);
+      }
+
+      /* Bottom: dialog box with typing prompt */
+      .dialog {
+        min-height: 48px;
+        position: relative;
+        font-size: 9px;
+      }
+
+      .dialog-arrow {
+        position: absolute;
+        bottom: 6px;
+        right: 10px;
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 6px solid var(--gb-black);
+        animation: arrow-bounce 0.8s ease-in-out infinite;
+      }
+
+      @keyframes arrow-bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(2px); }
+      }
+
+      .dialog p {
+        margin-bottom: 2px;
+      }
+
+      .dialog a {
+        color: var(--gb-black);
+        text-decoration: none;
+        border-bottom: 1.5px solid var(--gb-black);
+      }
+
+      .dialog a:hover {
+        background: var(--gb-black);
+        color: var(--gb-white);
+      }
+
+      /* Inline section label */
+      .label-top {
+        font-size: 7px;
+        color: var(--gb-gray-dark);
+        letter-spacing: 2px;
+        margin-bottom: 3px;
+      }
+
+      /* ===== CONTROLS (bottom of GameBoy) ===== */
+      .controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 24px;
+        padding: 0 8px;
+      }
+
+      .dpad {
+        width: 60px;
+        height: 60px;
+        position: relative;
+      }
+
+      .dpad::before,
+      .dpad::after {
+        content: "";
+        position: absolute;
+        background: #1a1a1a;
+        border-radius: 3px;
+        box-shadow: inset 0 0 4px rgba(255,255,255,0.1);
+      }
+
+      .dpad::before {
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 20px;
+        transform: translateY(-50%);
+      }
+
+      .dpad::after {
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 20px;
+        transform: translateX(-50%);
+      }
+
+      .ab-buttons {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        transform: rotate(-25deg);
+      }
+
+      .btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: linear-gradient(180deg, #4a0a1a 0%, #2a0005 100%);
+        border: 2px solid #1a0005;
+        font-size: 9px;
+        color: rgba(255,255,255,0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 
+          inset 0 -2px 0 rgba(0,0,0,0.5),
+          inset 0 2px 0 rgba(255,255,255,0.1);
+        cursor: pointer;
+      }
+
+      .btn:active {
+        box-shadow: 
+          inset 0 2px 2px rgba(0,0,0,0.5);
+      }
+
+      .start-select {
+        position: absolute;
+        bottom: 14px;
+        left: 50%;
+        transform: translateX(-50%) rotate(-25deg);
+        display: flex;
+        gap: 14px;
+      }
+
+      .ss-btn {
+        width: 22px;
+        height: 7px;
+        border-radius: 8px;
+        background: #4a4a4a;
+        box-shadow: 
+          inset 0 1px 0 rgba(255,255,255,0.1),
+          inset 0 -1px 0 rgba(0,0,0,0.3);
+        position: relative;
+      }
+
+      .ss-btn::after {
+        content: attr(data-label);
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%) rotate(25deg);
+        font-size: 5px;
+        color: rgba(255,255,255,0.5);
+        letter-spacing: 1px;
+        white-space: nowrap;
+      }
+
+      /* Speaker grille */
+      .speaker {
+        position: absolute;
+        bottom: 30px;
+        right: 24px;
+        display: grid;
+        grid-template-columns: repeat(6, 2px);
+        gap: 2px;
+        transform: rotate(-25deg);
+      }
+
+      .speaker span {
+        width: 2px;
+        height: 14px;
+        background: rgba(0,0,0,0.4);
+        border-radius: 1px;
+      }
+
+      /* Mobile */
+      @media (max-width: 520px) {
         body {
-          font-size: 9px;
-          padding: 12px;
+          padding: 10px;
         }
-        .title-box h2 {
-          font-size: 20px;
+        .gameboy {
+          padding: 24px 16px 48px;
         }
-        .dialog-box {
-          padding: 16px 18px;
+        .screen-bezel {
+          padding: 12px 12px 32px;
         }
-        .menu-item:hover {
-          margin: 0 -18px;
-          padding: 4px 18px;
+        .trainer-sprite {
+          width: 48px;
+          height: 48px;
         }
+        .start-menu {
+          width: 96px;
+        }
+        .menu-list li {
+          font-size: 8px;
+        }
+        .trainer-info {
+          font-size: 7px;
+        }
+        .trainer-name {
+          font-size: 10px;
+        }
+        .info-box, .dialog {
+          font-size: 8px;
+        }
+      }
+
+      @media (max-height: 780px) {
+        .gameboy {
+          max-width: 420px;
+          padding: 20px 20px 40px;
+        }
+      }
+
+      /* Hidden heading for SEO */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
       }
     </style>
   </head>
 
   <body>
-    <div class="screen">
-      <h1 class="hidden" style="display:none">pierlorenzo peruzzo</h1>
+    <h1 class="sr-only">pierlorenzo peruzzo — pier0x</h1>
 
-      <!-- Title Card -->
-      <div class="dialog-box title-box">
-        <img src="/imgs/pfp.png" class="pfp" alt="pier" />
-        <h2>PIER</h2>
-        <div class="subtitle">PIER0X  ·  LOS ANGELES, CA</div>
-        <div class="pokeball">●───────●</div>
+    <div class="gameboy">
+      <div class="power-led">
+        <span class="led-dot"></span>
+        <span class="led-label">BATTERY</span>
       </div>
 
-      <!-- Navigation Menu -->
-      <div class="dialog-box">
-        <div class="section-label">MENU</div>
-        <a href="building.html" class="menu-item"><span class="arrow">▶</span>BUILDING</a>
-        <a href="inspo.html" class="menu-item"><span class="arrow">▶</span>INSPO</a>
-        <a href="writing.html" class="menu-item"><span class="arrow">▶</span>WRITING</a>
+      <div class="screen-bezel">
+        <div class="screen">
+
+          <!-- TOP: Trainer Card + Start Menu -->
+          <div class="top-section">
+            <!-- Trainer Info Box -->
+            <div class="box trainer-card">
+              <img src="/imgs/pfp.png" class="trainer-sprite" alt="pier" />
+              <div class="trainer-info">
+                <div class="trainer-name">PIER</div>
+                <div><span class="label">ID:</span>PIER0X</div>
+                <div><span class="label">LOC:</span>LOS ANGELES</div>
+                <div><span class="label">FROM:</span>VARESE, IT</div>
+              </div>
+            </div>
+
+            <!-- Start Menu (right side, classic Pokemon Red) -->
+            <div class="box start-menu">
+              <ul class="menu-list">
+                <li class="selected"><a href="building.html">BUILDING</a></li>
+                <li><a href="writing.html">WRITING</a></li>
+                <li><a href="inspo.html">INSPO</a></li>
+                <li><a href="/tech-artisan">ARTISAN</a></li>
+                <li><a href="mailto:pier@pier0x.com">EMAIL</a></li>
+                <li><a href="https://twitter.com/pier0x" target="_blank">TWITTER</a></li>
+                <li><a href="https://github.com/pier0x" target="_blank">GITHUB</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- MIDDLE: Current Quest -->
+          <div class="box info-box">
+            <div class="label-top">CURRENT QUEST</div>
+            <ul class="quest-list">
+              <li>Content gen for web3 creatives</li>
+              <li>Bio/chem lab training in VR</li>
+              <li>Influencer marketing · food biz</li>
+            </ul>
+          </div>
+
+          <!-- BOTTOM: Dialog box -->
+          <div class="box dialog">
+            <p>Hi! I'm <a href="/tech-artisan">PIER</a>, a tech artisan.</p>
+            <p>Building <a href="https://www.holoworld.com/" target="_blank">HOLOWORLD</a> &amp; <a href="https://www.openlabvr.com" target="_blank">OPENLAB</a>.</p>
+            <div class="dialog-arrow"></div>
+          </div>
+
+        </div>
       </div>
 
-      <!-- About / Intro -->
-      <div class="dialog-box text-content">
-        <div class="section-label">WHO IS PIER?</div>
-        <p><a href="/tech-artisan">tech artisan</a> from
-          <a href="https://www.google.com/maps/place/21100+Varese,+VA,+Italy/@45.8225729,8.7846885,13023m" target="_blank">varese</a>, it.</p>
-        <p>building
-          <a href="https://www.holoworld.com/" target="_blank">holoworld</a>,
-          <a href="https://www.openlabvr.com" target="_blank">openlab</a>
-        </p>
-
-        <hr class="sep" />
-
-        <div class="section-label">CURRENT QUEST</div>
-        <ul class="work-list">
-          <li>content gen platform for web3 creatives</li>
-          <li>bio &amp; chem lab training in VR</li>
-          <li>influencer marketing for food biz</li>
-        </ul>
-        <p style="margin-top:8px; font-size:9px;">more... <a href="building.html">building</a><span class="cursor-blink"></span></p>
+      <!-- D-Pad + A/B buttons -->
+      <div class="controls">
+        <div class="dpad"></div>
+        <div class="ab-buttons">
+          <div class="btn">B</div>
+          <div class="btn">A</div>
+        </div>
       </div>
 
-      <!-- Contact -->
-      <div class="dialog-box">
-        <div class="section-label">CONTACT</div>
-        <ul class="contact-list">
-          <li>EMAIL  pier [at] pier0x.com</li>
-          <li>X  <a href="https://twitter.com/pier0x" target="_blank">@pier0x</a></li>
-          <li>GH  <a href="https://github.com/pier0x" target="_blank">pier0x</a></li>
-        </ul>
+      <!-- Start/Select -->
+      <div class="start-select">
+        <div class="ss-btn" data-label="SELECT"></div>
+        <div class="ss-btn" data-label="START"></div>
       </div>
 
-      <!-- Footer -->
-      <div class="status-bar">
-        <span>pier0x.com</span>
-        <span>▼ SCROLL FOR MORE</span>
+      <!-- Speaker grille -->
+      <div class="speaker">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
       </div>
     </div>
+
+    <script>
+      // Keyboard navigation (arrow keys cycle menu selection - Pokemon style)
+      const menuItems = document.querySelectorAll('.menu-list li');
+      let selectedIdx = 0;
+
+      function updateSelection() {
+        menuItems.forEach((item, i) => {
+          item.classList.toggle('selected', i === selectedIdx);
+        });
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          selectedIdx = (selectedIdx + 1) % menuItems.length;
+          updateSelection();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          selectedIdx = (selectedIdx - 1 + menuItems.length) % menuItems.length;
+          updateSelection();
+        } else if (e.key === 'Enter' || e.key === 'a' || e.key === 'A') {
+          const link = menuItems[selectedIdx].querySelector('a');
+          if (link) link.click();
+        }
+      });
+    </script>
   </body>
 </html>
