@@ -8,96 +8,274 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap"
       rel="stylesheet"
     />
-    <link href="main.css" rel="stylesheet" />
-
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :root {
+        --bg: #fafaf9;
+        --paper: #ffffff;
+        --ink: #1c1917;
+        --muted: #78716c;
+        --line: #e7e5e4;
+        --accent: #dc2626;
+      }
+
+      html, body {
+        background: var(--bg);
+        color: var(--ink);
+      }
+
+      body {
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 14px;
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        /* Subtle paper grain */
+        background-image: 
+          radial-gradient(circle at 1px 1px, rgba(0,0,0,0.015) 1px, transparent 0);
+        background-size: 24px 24px;
+      }
+
+      .serif {
+        font-family: 'Instrument Serif', Georgia, serif;
+        letter-spacing: -0.01em;
+      }
+
+      .name {
+        font-family: 'Instrument Serif', Georgia, serif;
+        font-weight: 400;
+        font-style: italic;
+        letter-spacing: -0.04em;
+        line-height: 0.9;
+      }
+
+      .pfp {
+        border-radius: 50%;
+        background: var(--paper);
+        padding: 2px;
+        box-shadow: 
+          0 1px 2px rgba(0,0,0,0.04),
+          0 4px 20px rgba(0,0,0,0.06);
+        transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .pfp:hover {
+        transform: rotate(-3deg) scale(1.02);
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        font-size: 11px;
+        color: var(--muted);
+        background: var(--paper);
+        transition: all 0.2s ease;
+      }
+      .chip:hover {
+        border-color: var(--ink);
+        color: var(--ink);
+      }
+      .chip .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 0 2px rgba(16,185,129,0.2);
+      }
+
+      .nav-link {
+        position: relative;
+        padding: 4px 0;
+        color: var(--muted);
+        transition: color 0.15s ease;
+      }
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 1px;
+        background: var(--ink);
+        transform-origin: right;
+        transform: scaleX(0);
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .nav-link:hover {
+        color: var(--ink);
+      }
+      .nav-link:hover::after {
+        transform-origin: left;
+        transform: scaleX(1);
+      }
+
+      .link {
+        color: var(--ink);
+        border-bottom: 1px solid var(--muted);
+        transition: border-color 0.15s ease, color 0.15s ease;
+      }
+      .link:hover {
+        border-bottom-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .divider {
+        height: 1px;
+        background: linear-gradient(90deg, var(--line), transparent);
+        border: 0;
+      }
+
+      .section-label {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+
+      .bullet {
+        position: relative;
+        padding-left: 18px;
+      }
+      .bullet::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.75em;
+        width: 8px;
+        height: 1px;
+        background: var(--muted);
+      }
+
+      .contact-row {
+        display: grid;
+        grid-template-columns: 70px 1fr;
+        padding: 8px 0;
+        border-bottom: 1px dashed var(--line);
+        align-items: baseline;
+      }
+      .contact-row:last-child {
+        border-bottom: 0;
+      }
+      .contact-row .key {
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      /* Fade-in on load */
+      .reveal {
+        opacity: 0;
+        transform: translateY(8px);
+        animation: reveal 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      }
+      .reveal.d1 { animation-delay: 0.05s; }
+      .reveal.d2 { animation-delay: 0.15s; }
+      .reveal.d3 { animation-delay: 0.25s; }
+      .reveal.d4 { animation-delay: 0.35s; }
+
+      @keyframes reveal {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .name { font-size: 3.5rem !important; }
+        .pfp-wrap { width: 112px !important; height: 112px !important; }
+      }
+    </style>
   </head>
 
-  <body class="font-mono text-sm bg-zinc-50 text-zinc-800">
-    <div class="md:max-w-3xl mx-auto px-5 py-24">
+  <body>
+    <div class="max-w-2xl mx-auto px-6 py-20 md:py-28">
       <h1 class="hidden">pierlorenzo peruzzo</h1>
 
-      <div class="flex items-center space-x-4">
-        <img src="/imgs/pfp.png" class="aspect-square h-48 w-48" />
-        <div>
-          <h2 class="text-6xl mb-6">pier</h2>
-          [<a href="building.html" class="underline">building</a>] [<a
-            href="inspo.html"
-            class="underline"
-            >inspo</a
-          >] [<a href="writing.html" class="underline">writing</a>]
+      <!-- Header -->
+      <header class="reveal d1">
+        <div class="flex items-center gap-6 mb-10">
+          <div class="pfp-wrap w-32 h-32 flex-shrink-0">
+            <img src="/imgs/pfp.png" class="pfp w-full h-full object-cover" alt="pier" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <h2 class="name text-7xl md:text-8xl mb-3">pier</h2>
+            <span class="chip">
+              <span class="dot"></span>
+              Los Angeles, CA
+            </span>
+          </div>
         </div>
-      </div>
 
-      <hr class="my-6" />
+        <nav class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+          <a href="building.html" class="nav-link">building</a>
+          <a href="writing.html" class="nav-link">writing</a>
+          <a href="inspo.html" class="nav-link">inspo</a>
+        </nav>
+      </header>
 
-      <!-- intro -->
-      <section>
-        <p>
-          <a class="underline" href="/tech-artisan">tech artisan</a>
-          based in los angeles, ca. from
-          <a
-            class="underline"
-            href="https://www.google.com/maps/place/21100+Varese,+VA,+Italy/@45.8225729,8.7846885,13023m/data=!3m1!1e3!4m5!3m4!1s0x47867e25755f0fe3:0x1df9bb5bf2862168!8m2!3d45.8205989!4d8.8250576"
-            target="”_blank”"
-          >
-            varese</a
-          >, it.
+      <hr class="divider my-10" />
+
+      <!-- Intro -->
+      <section class="reveal d2 space-y-4">
+        <p class="serif text-xl md:text-2xl leading-snug text-stone-800">
+          <a class="link" href="/tech-artisan">tech artisan</a> based in los angeles, ca —
+          from <a class="link" href="https://www.google.com/maps/place/21100+Varese,+VA,+Italy/@45.8225729,8.7846885,13023m/data=!3m1!1e3!4m5!3m4!1s0x47867e25755f0fe3:0x1df9bb5bf2862168!8m2!3d45.8205989!4d8.8250576" target="_blank">varese, it</a>.
         </p>
-        <p>
-          building
-          <a
-            class="underline"
-            href="https://www.holoworld.com/"
-            target="”_blank”"
-            >holoworld</a
-          >,
-          <a
-            class="underline"
-            href="https://www.openlabvr.com"
-            target="”_blank”"
-            >openlab</a
-          >
-        </p>
-        <p class="pt-2">currently working on:</p>
-        <ul>
-          <li class="ml-2">- content generation platform for web3 creatives</li>
-          <li class="ml-2">- biology and chemistry lab training in vr</li>
-          <li class="ml-2">- influencer marketing app for food businesses</li>
-        </ul>
-        <p class="pt-1">
-          more...
-          <a class="underline" href="building.html">building</a>
+        <p class="text-stone-600">
+          Building <a class="link" href="https://www.holoworld.com/" target="_blank">holoworld</a> and <a class="link" href="https://www.openlabvr.com" target="_blank">openlab</a>.
         </p>
       </section>
 
-      <hr class="my-6" />
+      <hr class="divider my-10" />
 
-      <!-- contact -->
-      <section>
-        <p>reach out / links:</p>
-        <ul>
-          <li>[email: pier [at] pier0x dot com]</li>
-          <li>
-            [x:
-            <a
-              class="underline"
-              href="https://twitter.com/pier0x"
-              target="_blank"
-              >pier0x</a
-            >]
-          </li>
-          <li>
-            [github:
-            <a href="https://github.com/pier0x" target="_blank" class="underline">pier0x</a
-            >]
-          </li>
+      <!-- Currently -->
+      <section class="reveal d3">
+        <div class="section-label">Currently working on</div>
+        <ul class="space-y-2 text-stone-700">
+          <li class="bullet">Content generation platform for web3 creatives</li>
+          <li class="bullet">Biology &amp; chemistry lab training in VR</li>
+          <li class="bullet">Influencer marketing app for food businesses</li>
         </ul>
+        <p class="mt-4 text-sm text-stone-500">
+          more in <a class="link" href="building.html">building</a> →
+        </p>
       </section>
+
+      <hr class="divider my-10" />
+
+      <!-- Contact -->
+      <section class="reveal d4">
+        <div class="section-label">Reach out</div>
+        <div>
+          <div class="contact-row">
+            <span class="key">Email</span>
+            <span>pier [at] pier0x.com</span>
+          </div>
+          <div class="contact-row">
+            <span class="key">X</span>
+            <a class="link" href="https://twitter.com/pier0x" target="_blank">@pier0x</a>
+          </div>
+          <div class="contact-row">
+            <span class="key">GitHub</span>
+            <a class="link" href="https://github.com/pier0x" target="_blank">pier0x</a>
+          </div>
+        </div>
+      </section>
+
+      <footer class="mt-16 text-xs text-stone-400">
+        © pier0x
+      </footer>
     </div>
   </body>
 </html>
