@@ -9,95 +9,295 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
       rel="stylesheet"
     />
-    <link href="main.css" rel="stylesheet" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-    <script src="https://cdn.tailwindcss.com"></script>
+      body {
+        background-color: #f8f8f8;
+        font-family: 'Press Start 2P', monospace;
+        font-size: 11px;
+        line-height: 2;
+        color: #1a1a2e;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        image-rendering: pixelated;
+      }
+
+      .screen {
+        max-width: 520px;
+        width: 100%;
+        padding: 16px;
+      }
+
+      /* Pokemon Red dialog box */
+      .dialog-box {
+        border: 4px solid #1a1a2e;
+        border-radius: 12px;
+        background: #f8f8f8;
+        padding: 20px 24px;
+        margin-bottom: 16px;
+        position: relative;
+        box-shadow: 
+          inset 2px 2px 0 #fff,
+          inset -2px -2px 0 #d0d0d0,
+          4px 4px 0 rgba(0,0,0,0.1);
+      }
+
+      /* Title header box */
+      .title-box {
+        text-align: center;
+        padding: 24px;
+      }
+
+      .title-box h2 {
+        font-size: 28px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+
+      .title-box .subtitle {
+        font-size: 8px;
+        color: #666;
+        letter-spacing: 2px;
+      }
+
+      .pfp {
+        width: 80px;
+        height: 80px;
+        image-rendering: pixelated;
+        border: 3px solid #1a1a2e;
+        margin: 0 auto 16px;
+        display: block;
+      }
+
+      /* Menu items */
+      .menu-item {
+        display: flex;
+        align-items: baseline;
+        padding: 4px 0;
+        text-decoration: none;
+        color: #1a1a2e;
+        transition: none;
+        cursor: pointer;
+      }
+
+      .menu-item:hover .arrow {
+        visibility: visible;
+      }
+
+      .menu-item:hover {
+        background: #1a1a2e;
+        color: #f8f8f8;
+        margin: 0 -24px;
+        padding: 4px 24px;
+      }
+
+      .arrow {
+        visibility: hidden;
+        margin-right: 8px;
+        font-size: 10px;
+      }
+
+      .menu-item:first-child .arrow {
+        visibility: visible;
+      }
+
+      /* Separator */
+      .sep {
+        border: none;
+        border-top: 2px dashed #ccc;
+        margin: 12px 0;
+      }
+
+      /* Section labels */
+      .section-label {
+        font-size: 8px;
+        color: #888;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+
+      /* Text content */
+      .text-content p {
+        margin-bottom: 8px;
+      }
+
+      .text-content a {
+        color: #1a1a2e;
+        text-decoration: none;
+        border-bottom: 2px solid #1a1a2e;
+      }
+
+      .text-content a:hover {
+        background: #1a1a2e;
+        color: #f8f8f8;
+      }
+
+      /* Status bar */
+      .status-bar {
+        display: flex;
+        justify-content: space-between;
+        font-size: 8px;
+        color: #999;
+        padding: 8px 0 0;
+        letter-spacing: 1px;
+      }
+
+      /* Blinking cursor */
+      .cursor-blink {
+        display: inline-block;
+        width: 8px;
+        height: 12px;
+        background: #1a1a2e;
+        animation: blink 1s step-end infinite;
+        vertical-align: middle;
+        margin-left: 4px;
+      }
+
+      @keyframes blink {
+        50% { opacity: 0; }
+      }
+
+      /* Currently working on list */
+      .work-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .work-list li {
+        padding: 2px 0;
+      }
+
+      .work-list li::before {
+        content: "▸ ";
+      }
+
+      /* Contact list */
+      .contact-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .contact-list li {
+        padding: 3px 0;
+        font-size: 10px;
+      }
+
+      .contact-list a {
+        color: #1a1a2e;
+        text-decoration: none;
+        border-bottom: 2px solid #1a1a2e;
+      }
+
+      .contact-list a:hover {
+        background: #1a1a2e;
+        color: #f8f8f8;
+      }
+
+      /* Pokeball decoration */
+      .pokeball {
+        text-align: center;
+        font-size: 16px;
+        margin: 4px 0;
+        letter-spacing: 8px;
+      }
+
+      /* Press start prompt */
+      .press-start {
+        text-align: center;
+        font-size: 8px;
+        animation: blink 1.5s step-end infinite;
+        padding: 8px 0;
+        letter-spacing: 2px;
+      }
+
+      @media (max-width: 480px) {
+        body {
+          font-size: 9px;
+          padding: 12px;
+        }
+        .title-box h2 {
+          font-size: 20px;
+        }
+        .dialog-box {
+          padding: 16px 18px;
+        }
+        .menu-item:hover {
+          margin: 0 -18px;
+          padding: 4px 18px;
+        }
+      }
+    </style>
   </head>
 
-  <body class="font-mono text-sm bg-zinc-900 text-gray-200">
-    <div class="md:max-w-3xl mx-auto px-5 py-24">
-      <h1 class="hidden">pierlorenzo peruzzo</h1>
+  <body>
+    <div class="screen">
+      <h1 class="hidden" style="display:none">pierlorenzo peruzzo</h1>
 
-      <div class="flex items-center space-x-4">
-        <img src="/imgs/pfp.png" class="aspect-square h-48 w-48" />
-        <div>
-          <h2 class="text-6xl mb-6">pier</h2>
-          [<a href="building.html" class="underline">building</a>] [<a
-            href="inspo.html"
-            class="underline"
-            >inspo</a
-          >] [<a href="writing.html" class="underline">writing</a>]
-        </div>
+      <!-- Title Card -->
+      <div class="dialog-box title-box">
+        <img src="/imgs/pfp.png" class="pfp" alt="pier" />
+        <h2>PIER</h2>
+        <div class="subtitle">PIER0X  ·  LOS ANGELES, CA</div>
+        <div class="pokeball">●───────●</div>
       </div>
 
-      <hr class="my-6" />
+      <!-- Navigation Menu -->
+      <div class="dialog-box">
+        <div class="section-label">MENU</div>
+        <a href="building.html" class="menu-item"><span class="arrow">▶</span>BUILDING</a>
+        <a href="inspo.html" class="menu-item"><span class="arrow">▶</span>INSPO</a>
+        <a href="writing.html" class="menu-item"><span class="arrow">▶</span>WRITING</a>
+      </div>
 
-      <!-- intro -->
-      <section>
-        <p>
-          <a class="underline" href="/tech-artisan">tech artisan</a>
-          based in los angeles, ca. from
-          <a
-            class="underline"
-            href="https://www.google.com/maps/place/21100+Varese,+VA,+Italy/@45.8225729,8.7846885,13023m/data=!3m1!1e3!4m5!3m4!1s0x47867e25755f0fe3:0x1df9bb5bf2862168!8m2!3d45.8205989!4d8.8250576"
-            target="”_blank”"
-          >
-            varese</a
-          >, it.
+      <!-- About / Intro -->
+      <div class="dialog-box text-content">
+        <div class="section-label">WHO IS PIER?</div>
+        <p><a href="/tech-artisan">tech artisan</a> from
+          <a href="https://www.google.com/maps/place/21100+Varese,+VA,+Italy/@45.8225729,8.7846885,13023m" target="_blank">varese</a>, it.</p>
+        <p>building
+          <a href="https://www.holoworld.com/" target="_blank">holoworld</a>,
+          <a href="https://www.openlabvr.com" target="_blank">openlab</a>
         </p>
-        <p>
-          building
-          <a
-            class="underline"
-            href="https://www.holoworld.com/"
-            target="”_blank”"
-            >holoworld</a
-          >,
-          <a
-            class="underline"
-            href="https://www.openlabvr.com"
-            target="”_blank”"
-            >openlab</a
-          >
-        </p>
-        <p class="pt-2">currently working on:</p>
-        <ul>
-          <li class="ml-2">- content generation platform for web3 creatives</li>
-          <li class="ml-2">- biology and chemistry lab training in vr</li>
-          <li class="ml-2">- influencer marketing app for food businesses</li>
+
+        <hr class="sep" />
+
+        <div class="section-label">CURRENT QUEST</div>
+        <ul class="work-list">
+          <li>content gen platform for web3 creatives</li>
+          <li>bio &amp; chem lab training in VR</li>
+          <li>influencer marketing for food biz</li>
         </ul>
-        <p class="pt-1">
-          more...
-          <a class="underline" href="building.html">building</a>
-        </p>
-      </section>
+        <p style="margin-top:8px; font-size:9px;">more... <a href="building.html">building</a><span class="cursor-blink"></span></p>
+      </div>
 
-      <hr class="my-6" />
-
-      <!-- contact -->
-      <section>
-        <p>reach out / links:</p>
-        <ul>
-          <li>[email: pier [at] pier0x dot com]</li>
-          <li>
-            [x:
-            <a
-              class="underline"
-              href="https://twitter.com/pier0x"
-              target="_blank"
-              >pier0x</a
-            >]
-          </li>
-          <li>
-            [github:
-            <a href="https://github.com/pier0x" target="_blank" class="underline">pier0x</a
-            >]
-          </li>
+      <!-- Contact -->
+      <div class="dialog-box">
+        <div class="section-label">CONTACT</div>
+        <ul class="contact-list">
+          <li>EMAIL  pier [at] pier0x.com</li>
+          <li>X  <a href="https://twitter.com/pier0x" target="_blank">@pier0x</a></li>
+          <li>GH  <a href="https://github.com/pier0x" target="_blank">pier0x</a></li>
         </ul>
-      </section>
+      </div>
+
+      <!-- Footer -->
+      <div class="status-bar">
+        <span>pier0x.com</span>
+        <span>▼ SCROLL FOR MORE</span>
+      </div>
     </div>
   </body>
 </html>
